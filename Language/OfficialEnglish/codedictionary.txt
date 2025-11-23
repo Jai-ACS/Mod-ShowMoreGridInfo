@@ -1,0 +1,3 @@
+Key	Value
+（最高值）	 (Max)
+天	Day(s)
