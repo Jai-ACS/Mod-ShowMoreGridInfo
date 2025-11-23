@@ -31,7 +31,7 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	
 	if self.bHasResizeTextArea ~= true then
 		CS.Wnd_GameMain.Instance.UIInfo.m_n32.UBBEnabled = true
-		CS.Wnd_GameMain.Instance.UIInfo.m_n32:SetSize(200, 175)
+		CS.Wnd_GameMain.Instance.UIInfo.m_n32:SetSize(200, 200)
 		self.bHasResizeTextArea = true
 	end
 	
@@ -128,7 +128,7 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 			fLing,
 			strLingAddion,
 			strTerrainDesc, strIce, strTerrainDesc2, nX, nY,
-			self:getFertilityColor(strFertilityDesc), strFertilityDesc, fFertility,
+			self.tbFertilityColor[strFertilityDesc], strFertilityDesc, fFertility,
 			strBeautyDesc, fBeauty,
 			self:getLightColor(), strLight, fLight,
 			self:getTemperatureColor(), strTemperatureDesc, strRoom, strTemperature
@@ -188,3 +188,4 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
+
