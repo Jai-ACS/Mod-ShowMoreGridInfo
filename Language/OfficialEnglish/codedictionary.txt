@@ -1,3 +1,10 @@
 Key	Value
-（最高值）	 (Max)
+(最高值)	 (Max)
 天	Day(s)
+灵气：%.2f	Qi: %.2f
+聚灵：%s	Gather Qi: %s
+金：	Metal: 
+水：	Water: 
+木：	Wood: 
+火：	Fire: 
+土：	Earth: 
