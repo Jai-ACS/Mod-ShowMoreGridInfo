@@ -3,10 +3,10 @@ local ShowGridMoreInfoMod = GameMain:GetMod("ShowGridMoreInfo")
 function ShowGridMoreInfoMod:OnInit()
 
 	ShowGridMoreInfoMod.tbFertilityColor = {}
-	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤肥沃")] = "#FF9100"
-	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤丰饶")] = "#C80001"
-	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤良质")] = "#1E90FF"
-	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤贫瘠")] = "#00FF00"
+	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤肥沃")] = "#008F00"
+	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤丰饶")] = "#B7FC7E"
+	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤良质")] = "#AEFF00"
+	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤贫瘠")] = "#8F4F4F"
 
 	local tbEventMod = GameMain:GetMod("_Event")
 	tbEventMod:RegisterEvent(g_emEvent.WindowEvent, self.OnWindowEvent, self)
@@ -36,123 +36,114 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	end
 	
 	xlua.private_accessible(CS.Wnd_GameMain)
-	local nCurMouseKey = CS.Wnd_GameMain.Instance.lastkey
+	local curKey = CS.Wnd_GameMain.Instance.lastkey
 	
-	if nCurMouseKey == self.nLastMouseKey and self.bForceUpdate ~= true then
+	if curKey == self.lastKey and self.gatheringLing ~= true then
 		return
 	end
-	self.nLastMouseKey = nCurMouseKey
-	self.bForceUpdate = nil
+	self.lastKey = curKey
+	self.gatheringLing = false
 	
 	local textfield = CS.Wnd_GameMain.Instance.UIInfo.m_n32
 	
-	if not GridMgr:KeyVaild(nCurMouseKey) then
+	if not GridMgr:KeyVaild(curKey) then
 		textfield.text = XT("未探索")
 		return
 	end
 
-	local fLing = Map:GetLing(nCurMouseKey)
-	local fLingAddion = Map.Effect:GetEffect(nCurMouseKey, CS.XiaWorld.g_emMapEffectKind.LingAddion)
-	local fLingAddionInFact = Map.Effect:GetEffect(nCurMouseKey, CS.XiaWorld.g_emMapEffectKind.LingAddion, 0, true)
+	local fLing = Map:GetLing(curKey)
+	local fLingAddion = Map.Effect:GetEffect(curKey, CS.XiaWorld.g_emMapEffectKind.LingAddion)
+	local fLingAddionInFact = Map.Effect:GetEffect(curKey, CS.XiaWorld.g_emMapEffectKind.LingAddion, 0, true)
 	local fToMaxLingAddionTime = 0
 	if fLingAddion ~= fLingAddionInFact then
-		local MapEffectData = Map.Effect:GetEffectData(nCurMouseKey, CS.XiaWorld.g_emMapEffectKind.LingAddion)
+		local MapEffectData = Map.Effect:GetEffectData(curKey, CS.XiaWorld.g_emMapEffectKind.LingAddion)
 		fToMaxLingAddionTime = MapEffectData.creattime + 3000 - TolSecond
-		self.bForceUpdate = true
+		self.gatheringLing = true
 	end
 
-	local strLingAddion = ""
-	if fLingAddion == 0 then
-		strLingAddion = "无"
-	elseif fToMaxLingAddionTime == 0 then
-		strLingAddion = string.format("%.2f[color=#00FF00]" .. XT("（最高值）" .. "[/color]", fLingAddionInFact)
-	else
-		strLingAddion = string.format("%.2f[color=#FF0000](%s后到%.2f)[/color]", fLingAddionInFact, self:GameTime2Str(fToMaxLingAddionTime), fLingAddion)
-	end
+	local strLingAddion = self:formatLingAddionStr(fLingAddion, fToMaxLingAddionTime)
 
 	if CS.Wnd_GameMain.Instance.openFengshui then
-		local EArray = Map:GetElement(nCurMouseKey)
-		local EPArray = Map:GetElementProportion(nCurMouseKey)
+		local EArray = Map:GetElement(curKey)
+		local EPArray = Map:GetElementProportion(curKey)
 		textfield.text = string.format(
-			"灵气:%.2f\n" ..
-			"聚灵:%s\n" ..
-			"[color=#FFEB68]金  %05.2f  %02.0f%%[/color]\n" .. 
-			"[color=#78C84E]木  %05.2f  %02.0f%%[/color]\n" ..
-			"[color=#81C1F5]水  %05.2f  %02.0f%%[/color]\n" ..
-			"[color=#DA494E]火  %05.2f  %02.0f%%[/color]\n" ..
-			"[color=#986B39]土  %05.2f  %02.0f%%[/color]",
+			XT("灵气：%.2f") .. "\r\n" ..
+			XT("聚灵：%s") .. "\r\n" ..
+			"[color=#FFEB68]" .. XT("金：") .. "%05.2f  %02.0f%%[/color]\r\n" ..
+			"[color=#81C1F5]" .. XT("水：") .. "%05.2f  %02.0f%%[/color]\r\n" ..
+			"[color=#78C84E]" .. XT("木：") .. "%05.2f  %02.0f%%[/color]\r\n" ..
+			"[color=#DA494E]" .. XT("火：") .. "%05.2f  %02.0f%%[/color]\r\n" ..
+			"[color=#986B39]" .. XT("土：") .. "%05.2f  %02.0f%%[/color]",
 				fLing,
 				strLingAddion,
 				EArray[1], EPArray[1] * 100,
-				EArray[2], EPArray[2] * 100,
 				EArray[3], EPArray[3] * 100,
+				EArray[2], EPArray[2] * 100,
 				EArray[4], EPArray[4] * 100,
 				EArray[5], EPArray[5] * 100
 		)
 		return
 	end
 
-	local fTemperature = Map:GetTemperature(nCurMouseKey)
-	local fFertility = Map:GetFertility(nCurMouseKey)
-	local fBeauty = Map:GetBeauty(nCurMouseKey, true)
-	local fLight = Map:GetLight(nCurMouseKey)
-	local strTerrainName = Map.Terrain:GetTerrainName(nCurMouseKey, true)
-	local TerrainDef = Map.Terrain:GetTerrain(nCurMouseKey)
+	local fTemperature = Map:GetTemperature(curKey)
+	local fFertility = Map:GetFertility(curKey)
+	local fBeauty = Map:GetBeauty(curKey, true)
+	local fLight = Map:GetLight(curKey)
+	local strTerrainName = Map.Terrain:GetTerrainName(curKey, true)
+	local TerrainDef = Map.Terrain:GetTerrain(curKey)
 
-	local nX = (nCurMouseKey - nCurMouseKey % Map.Size) / Map.Size + 1
-	local nY = nCurMouseKey % Map.Size + 1
-	local strMsg0 = Map.Terrain:GetTerrainName(nCurMouseKey, false)
-	local strMsg1 = self:GetValueByMap(GameDefine.FertilityDesc, fFertility)
-	local strMsg3 = self:GetValueByMap(GameDefine.TemperatureDesc, fTemperature)
-	local strMsg2 = self:GetValueByMap(GameDefine.BeautyDesc, fBeauty)
-	local strMsg4 = self:GetValueByMap(GameDefine.LightDesc, fLight)
-	local strMsg5 = ""
-	local strMsg6 = ""
-	local strMsg7 = tostring(fTemperature)
-	local strMsg8 = ""
+	local nX = (curKey - curKey % Map.Size) / Map.Size + 1
+	local nY = curKey % Map.Size + 1
+	local strTerrainDesc = Map.Terrain:GetTerrainName(curKey, false)
+	local strFertilityDesc = self:GetValueByMap(GameDefine.FertilityDesc, fFertility)
+	local strTemperatureDesc = self:GetValueByMap(GameDefine.TemperatureDesc, fTemperature)
+	local strBeautyDesc = self:GetValueByMap(GameDefine.BeautyDesc, fBeauty)
+	local strLightDesc = self:GetValueByMap(GameDefine.LightDesc, fLight)
+	local strRoom = ""
+	local strTerrainDesc2 = ""
+	local strTemperature = tostring(fTemperature)
+	local strIce = ""
 
-	if AreaMgr:CheckArea(nCurMouseKey, "Room") ~= nil then
-		strMsg5 = XT("(室)")
+	if AreaMgr:CheckArea(curKey, "Room") ~= nil then
+		strRoom = XT("(室)")
 	end
 
-	if TerrainDef.IsWater and Map.Snow:GetSnow(nCurMouseKey) >= 200 then
-		strMsg8 = XT("(冰)")
+	if TerrainDef.IsWater and Map.Snow:GetSnow(curKey) >= 200 then
+		strIce = XT("(冰)")
 	end
 
 	if strTerrainName ~= nil and strTerrainName ~= "" then
-		strMsg6 = string.format("(%s)", strTerrainName)
+		strTerrainDesc2 = string.format("(%s)", strTerrainName)
 	end
 
 	-- {0}{8}{6}\n{1}\n{2}\n{4}\n{3}{5}({7:f1}℃)
-	textfield.text = string.format("灵气:%.2f\n聚灵:%s\n%s%s%s(%d, %d)\n%s[color=%s](%.2f)[/color]\n%s(%.2f)\n%s(%.2f)\n%s%s(%.1f℃)",
+	textfield.text = string.format(
+		XT("灵气：%.2f") .. "\r\n" ..
+		XT("聚灵：%s") .. "\r\n" ..
+		"%s %s %s(%d, %d)\r\n" ..
+		"[color=%s]%s (%.2f)[/color]\r\n" ..
+		"%s (%.2f)\r\n" ..
+		"[color=%s]%s (%.2f)[/color]\r\n" ..
+		"[color=%s]%s %s (%.1f℃)[/color]",
 			fLing,
 			strLingAddion,
-			strMsg0, strMsg8, strMsg6, nX, nY,
-			strMsg1, self.tbFertilityColor[strMsg1], fFertility,
-			strMsg2, fBeauty,
-			strMsg4, fLight,
-			strMsg3, strMsg5, strMsg7)
+			strTerrainDesc, strIce, strTerrainDesc2, nX, nY,
+			self:getFertilityColor(strFertilityDesc), strFertilityDesc, fFertility,
+			strBeautyDesc, fBeauty,
+			self:getLightColor(), strLight, fLight,
+			self:getTemperatureColor(), strTemperatureDesc, strRoom, strTemperature
+	)
 end
 
-function ShowGridMoreInfoMod:OnWindowEvent(pThing, pObjs)
-	local pWnd = pObjs[0]
-	local iArg = pObjs[1]
-	if pWnd == CS.Wnd_SchoolTrade.Instance and iArg == 1 then
-		pWnd.UIInfo.m_itemvalue.visible = true
-		pWnd.UIInfo.m_friendpontvalue.visible = true
-		pWnd.UIInfo.m_friendpontvalue.y = pWnd.UIInfo.m_itemvalue.y - pWnd.UIInfo.m_friendpontvalue.actualHeight
-	end
-end
-
-function ShowGridMoreInfoMod:GetValueByMap(tbMap, Key)
-	local Value
+function ShowGridMoreInfoMod:GetValueByMap(tbMap, key)
+	local value
 	for k, v in pairs(tbMap) do
-		if Key >= k then
+		if key >= k then
 			return v
 		end
-		Value = v
+		value = v
 	end
-	return Value
+	return value
 end
 
 -- 游戏的时间转成便于现实阅读的时间格式
@@ -166,6 +157,34 @@ function ShowGridMoreInfoMod:GameTime2Str(fGameTime)
 	return string.format("%02d:%02d", nHour, nMin)
 end
 
-function ShowGridMoreInfoMod:BindFertilityColor(strFertility)
-	return string.format("[coolor=#%s]%s[color]", self.tbFertilityColor[strFertility], strFertility)
+function ShowGridMoreInfoMod:formatLingAddionStr(fLingAddion, fToMaxLingAddionTime)
+	if fLingAddion == 0 then
+		return XT("无")
+	elseif fToMaxLingAddionTime == 0 then
+		return string.format("%.2f[color=#00FF00]" .. XT("(最高值)") .. "[/color]", fLingAddionInFact)
+	else
+		return string.format("%.2f[color=#FF0000](%s后到%.2f)[/color]", fLingAddionInFact, self:GameTime2Str(fToMaxLingAddionTime), fLingAddion)
+	end
+end
+
+function ShowGridMoreInfoMod:getLightColor(fLight)
+	if fLight <= 50 then
+		return "#000000"
+	else
+		return "#ffffff"
+	end
+end
+
+function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
+	if fTemperature <= 150 then
+		return "#0e58cf"
+	elseif fTemperature < 0 then
+		return "#68ace3"
+	elseif fTemperature < 100 then
+		return "#222222"
+	elseif fTemperature < 500 then
+		return "#e0662d"
+	else
+		return "#ff0000"
+	end
 end
