@@ -1,5 +1,5 @@
 Key	Value
-(最高值)	 (Max)
+(最高值)	(Max)
 天	Day(s)
 灵气：%.2f	Qi: %.2f
 聚灵：%s	Gather Qi: %s
