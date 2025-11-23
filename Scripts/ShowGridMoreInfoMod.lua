@@ -61,7 +61,7 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 		self.gatheringLing = true
 	end
 
-	local strLingAddion = self:formatLingAddionStr(fLingAddion, fToMaxLingAddionTime)
+	local strLingAddion = self:formatLingAddionStr(fLingAddion, fToMaxLingAddionTime, fLingAddionInFact)
 
 	if CS.Wnd_GameMain.Instance.openFengshui then
 		local EArray = Map:GetElement(curKey)
@@ -157,7 +157,7 @@ function ShowGridMoreInfoMod:GameTime2Str(fGameTime)
 	return string.format("%02d:%02d", nHour, nMin)
 end
 
-function ShowGridMoreInfoMod:formatLingAddionStr(fLingAddion, fToMaxLingAddionTime)
+function ShowGridMoreInfoMod:formatLingAddionStr(fLingAddion, fToMaxLingAddionTime, fLingAddionInFact)
 	if fLingAddion == 0 then
 		return XT("无")
 	elseif fToMaxLingAddionTime == 0 then
@@ -188,6 +188,3 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
-
-
-
