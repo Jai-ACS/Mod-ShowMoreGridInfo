@@ -38,11 +38,14 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	xlua.private_accessible(CS.Wnd_GameMain)
 	local curKey = CS.Wnd_GameMain.Instance.lastkey
 	
-	if curKey == self.lastKey and self.gatheringLing ~= true then
-		return
+	if curKey == self.lastKey and
+		self.gatheringLing ~= true and
+		self.wasOpenFengshui == CS.Wnd_GameMain.Instance.openFengshui then
+			return
 	end
 	self.lastKey = curKey
 	self.gatheringLing = false
+	self.wasOpenFengshui = CS.Wnd_GameMain.Instance.openFengshui
 	
 	local textfield = CS.Wnd_GameMain.Instance.UIInfo.m_n32
 	
@@ -188,3 +191,4 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
+
