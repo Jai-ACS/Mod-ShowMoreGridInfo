@@ -130,7 +130,7 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 			strTerrainDesc, strIce, strTerrainDesc2, nX, nY,
 			self.tbFertilityColor[strFertilityDesc], strFertilityDesc, fFertility,
 			strBeautyDesc, fBeauty,
-			self:getLightColor(fLight), strLight, fLight,
+			self:getLightColor(fLight), strLightDesc, fLight,
 			self:getTemperatureColor(fTemperature), strTemperatureDesc, strRoom, strTemperature
 	)
 end
@@ -188,5 +188,6 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
+
 
 
