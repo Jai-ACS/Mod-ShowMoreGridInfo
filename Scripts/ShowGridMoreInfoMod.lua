@@ -126,8 +126,8 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	textfield.text = string.format(
 		XT("灵气：%.2f") .. "\r\n" ..
 		XT("聚灵：%s") .. "\r\n" ..
-		-- "%s %s %s\r\n" ..
-		"%s %s %s(%d, %d)\r\n" ..
+		-- "%s %s %s (%d, %d)\r\n" ..
+		"%s %s %s\r\n" ..
 		"[color=%s]%s (%.2f)[/color]\r\n" ..
 		"%s (%.2f)\r\n" ..
 		"[color=%s]%s (%.2f)[/color]\r\n" ..
@@ -196,3 +196,4 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
+
