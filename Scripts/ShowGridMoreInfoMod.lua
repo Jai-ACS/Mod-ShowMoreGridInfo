@@ -6,7 +6,7 @@ function ShowGridMoreInfoMod:OnInit()
 	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤肥沃")] = "#008F00"
 	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤丰饶")] = "#B7FC7E"
 	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤良质")] = "#AEFF00"
-	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤贫瘠")] = "#8F4F4F"
+	ShowGridMoreInfoMod.tbFertilityColor[XT("土壤贫瘠")] = "#DB774F"
 
 	local tbEventMod = GameMain:GetMod("_Event")
 	tbEventMod:RegisterEvent(g_emEvent.WindowEvent, self.OnWindowEvent, self)
@@ -31,12 +31,15 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	
 	if self.bHasResizeTextArea ~= true then
 		CS.Wnd_GameMain.Instance.UIInfo.m_n32.UBBEnabled = true
-		CS.Wnd_GameMain.Instance.UIInfo.m_n32:SetSize(200, 185)
+		CS.Wnd_GameMain.Instance.UIInfo.m_n32:SetSize(225, 185)
 		self.bHasResizeTextArea = true
 	end
-	
+
+	-- Changed to use lastkey instead, as this value is set by the game's original GridInfo method (CS.Wnd_GameMain:UpdateGridInfo())
+	-- As the mobile version natively shows GridInfo of selected tile, this is the value that we should use
 	xlua.private_accessible(CS.Wnd_GameMain)
 	local curKey = CS.Wnd_GameMain.Instance.lastkey
+	-- local curKey = CS.UI_WorldLayer.Instance.MouseGridKey
 	
 	if curKey == self.lastKey and
 		self.gatheringLing ~= true and
@@ -95,26 +98,26 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	local strTerrainName = Map.Terrain:GetTerrainName(curKey, true)
 	local TerrainDef = Map.Terrain:GetTerrain(curKey)
 
-	local nX = (curKey - curKey % Map.Size) / Map.Size + 1
-	local nY = curKey % Map.Size + 1
+	-- local nX = (curKey - curKey % Map.Size) / Map.Size + 1
+	-- local nY = curKey % Map.Size + 1
 	local strTerrainDesc = Map.Terrain:GetTerrainName(curKey, false)
 	local strFertilityDesc = self:GetValueByMap(GameDefine.FertilityDesc, fFertility)
 	local strTemperatureDesc = self:GetValueByMap(GameDefine.TemperatureDesc, fTemperature)
 	local strBeautyDesc = self:GetValueByMap(GameDefine.BeautyDesc, fBeauty)
 	local strLightDesc = self:GetValueByMap(GameDefine.LightDesc, fLight)
-	local strRoom = ""
-	local strTerrainDesc2 = ""
 	local strTemperature = tostring(fTemperature)
-	local strIce = ""
-
+	
+	local strRoom = ""
 	if AreaMgr:CheckArea(curKey, "Room") ~= nil then
 		strRoom = XT("(室)")
 	end
-
+	
+	local strIce = ""
 	if TerrainDef.IsWater and Map.Snow:GetSnow(curKey) >= 200 then
 		strIce = XT("(冰)")
 	end
-
+	
+	local strTerrainDesc2 = ""
 	if strTerrainName ~= nil and strTerrainName ~= "" then
 		strTerrainDesc2 = string.format("(%s)", strTerrainName)
 	end
@@ -123,6 +126,7 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 	textfield.text = string.format(
 		XT("灵气：%.2f") .. "\r\n" ..
 		XT("聚灵：%s") .. "\r\n" ..
+		-- "%s %s %s\r\n" ..
 		"%s %s %s(%d, %d)\r\n" ..
 		"[color=%s]%s (%.2f)[/color]\r\n" ..
 		"%s (%.2f)\r\n" ..
@@ -130,7 +134,8 @@ function ShowGridMoreInfoMod:ShowGridInfo()
 		"[color=%s]%s %s (%.1f℃)[/color]",
 			fLing,
 			strLingAddion,
-			strTerrainDesc, strIce, strTerrainDesc2, nX, nY,
+			-- strTerrainDesc, strIce, strTerrainDesc2, nX, nY,
+			strTerrainDesc, strIce, strTerrainDesc2,
 			self.tbFertilityColor[strFertilityDesc], strFertilityDesc, fFertility,
 			strBeautyDesc, fBeauty,
 			self:getLightColor(fLight), strLightDesc, fLight,
@@ -164,9 +169,9 @@ function ShowGridMoreInfoMod:formatLingAddionStr(fLingAddion, fToMaxLingAddionTi
 	if fLingAddion == 0 then
 		return XT("无")
 	elseif fToMaxLingAddionTime == 0 then
-		return string.format("%.2f[color=#00FF00]" .. XT("(最高值)") .. "[/color]", fLingAddionInFact)
+		return string.format("%.2f [color=#00FF00]" .. XT("(最高值)") .. "[/color]", fLingAddionInFact)
 	else
-		return string.format("%.2f[color=#FF0000](%s后到%.2f)[/color]", fLingAddionInFact, self:GameTime2Str(fToMaxLingAddionTime), fLingAddion)
+		return string.format("%.2f [color=#FF0000]" .. XT("(%s 后到 %.2f)") .. "[/color]", fLingAddionInFact, self:GameTime2Str(fToMaxLingAddionTime), fLingAddion)
 	end
 end
 
@@ -179,7 +184,7 @@ function ShowGridMoreInfoMod:getLightColor(fLight)
 end
 
 function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
-	if fTemperature <= 150 then
+	if fTemperature <= -150 then
 		return "#0e58cf"
 	elseif fTemperature < 0 then
 		return "#68ace3"
@@ -191,4 +196,3 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
-
