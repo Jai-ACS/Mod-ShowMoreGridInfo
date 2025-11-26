@@ -2,7 +2,7 @@ Key	Value
 (最高值)	(Max)
 (%s 后到 %.2f)	(%s to %.2f)
 灵气：%.2f	Qi: %.2f
-聚灵：%s	Qi Gather: %s
+聚灵：%s	Qi(G): %s
 金：	Metal: 
 水：	Water: 
 木：	Wood: 
