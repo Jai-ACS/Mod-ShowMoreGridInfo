@@ -10,6 +10,10 @@ function ShowGridMoreInfoMod:OnInit()
 
 	local tbEventMod = GameMain:GetMod("_Event")
 	tbEventMod:RegisterEvent(g_emEvent.WindowEvent, self.OnWindowEvent, self)
+
+	if (MultiLanguage ~= nil) then
+		MultiLanguage:Load("Jai_HotkeyAdapter")
+	end
 end
 
 function ShowGridMoreInfoMod:OnRender(_)
@@ -196,4 +200,5 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#ff0000"
 	end
 end
+
 
