@@ -192,7 +192,7 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#0E58CF"
 	elseif fTemperature < 0 then
 		return "#68ACE3"
-	elseif fTemperature < 35 then
+	elseif fTemperature < 30 then
 		return "#FFFFFF"
 	elseif fTemperature < 100 then
 		return "#E8D55D"
@@ -202,7 +202,3 @@ function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 		return "#FF0000"
 	end
 end
-
-
-
-
