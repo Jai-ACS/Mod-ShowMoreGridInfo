@@ -183,23 +183,26 @@ function ShowGridMoreInfoMod:getLightColor(fLight)
 	if fLight <= 50 then
 		return "#000000"
 	else
-		return "#ffffff"
+		return "#FFFFFF"
 	end
 end
 
 function ShowGridMoreInfoMod:getTemperatureColor(fTemperature)
 	if fTemperature <= -150 then
-		return "#0e58cf"
+		return "#0E58CF"
 	elseif fTemperature < 0 then
-		return "#68ace3"
+		return "#68ACE3"
+	elseif fTemperature < 35 then
+		return "#FFFFFF"
 	elseif fTemperature < 100 then
-		return "#222222"
+		return "#E8D55D"
 	elseif fTemperature < 500 then
-		return "#e0662d"
+		return "#E0662D"
 	else
-		return "#ff0000"
+		return "#FF0000"
 	end
 end
+
 
 
 
