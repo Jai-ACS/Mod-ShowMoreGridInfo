@@ -3,7 +3,7 @@
 	"DisplayName": "Show More Grid Info | 显示格子更多的信息",
 	"GameVersion": 1.2,
 	"Version": 1.0,
-	"Desc": "[作者]\r\n    akira\r\n[简介]\r\n※游戏右下角显示格子信息处，额外显示，灵气浓度、土地肥沃、美观度、光线具体数值。由于信息过多，小程度的扩大了右下角的信息显示区域，所以文字的位置看起来会跟游戏本来的位置有一点偏差\n\n※聚灵效果显示，每一次拥有聚灵物体的位置发生变化都会导致聚灵范围内的所有格子的聚灵效果从0开始重聚，直到理论聚灵效果，这个时间需要5天，即使是从置物架上放下也会，所以谨慎挪动聚灵物。\n\n※打开五行界面时，显示五行具体数值及效果百分比。\n\n※即使未探索的格子也可显示。\n\n※与门派交易时，把双方的物品价值显示出来，明码标价，童叟无欺（懒得加mod了，顺手加这里）\n\nPS：出于性能考虑，可能会有瞬间性的显示不对的问题，挪动一下鼠标就好。\nPS：欢迎到我的创意工坊提Bug提需求~",
+	"Desc": "[Author | 作者]\r\nJai, Akira\r\n\r\n[Translator | ]\r\nDalois\r\n\r\n[Introduction | 简介]\r\n※Modified from More Grid Info mod from desktop version. Enhances the Grid Info displayed in the game. The enhanced Grid Info shows the following information of the selected tile:\r\n1. Qi value\r\n2. Current and maximum Gather Qi values (see next section)\r\n3. Terrain & Flooring\r\n4. Fertility (with numeric value)\r\n5. Attractiveness (with numeric value)\r\n6. Light (with numeric value)\r\n\r\n※Maximum Gather Qi is determined by adding all Qi Gather objects within effective range on the tile. Qi will gradually gather on the tile over 5 days, increasing the total tile Qi value. The gathered Qi will reset to 0 whenever any Qi Gather item is placed or removed, changing the maximum Gather Qi value on the tile. The Qi will reach maximum again after 5 days.\r\n\r\n※When the Feng Shui Vision is activated, the Grid Info changes to display Qi value, Gather Qi values and the Elemental Composition (with values) of the tile.\r\n\r\n※Information of unexplored grids/tiles can also be shown with this mod.",
 	"Author": "akira, Jai",
 	"UIPackage": "UI/ShowGridMoreInfo",
 	"Tags":["Function","Usability","ExcludeRealmsHeaven"],
