@@ -16,6 +16,7 @@ This mod has been changed in the following ways after porting:
 2. The original MoreGridInfo mod updates the Grid Info panel when the mouse cursor moves - this ported version of the mod updates Grid Info panel when a tile is selected (as per how Grid Info panel works on mobile version without mods)
 3. Increased Grid Info panel size, that would allow more information to be shown
 4. Some information are now colored according to the value being displayed, which may or may not help to make reading easier
+5. Sect trading price feature has been removed - it will be added as a separate mod later
 
 ## Main Features
 The Grid Info panel is enhanced, showing the following information of the selected tile:
@@ -27,7 +28,7 @@ The Grid Info panel is enhanced, showing the following information of the select
 6. Light (description & numeric value)
 7. Temperature (description & numeric value)
 
-* Maximum Gather Qi value is determined by adding all Gather Qi objects that are capable of reaching the selected tile. Qi will gradually gather onto the tile over 5 days, increasing the tile's Qi value. The gathered Qi will reset to 0 whenever any Gather Qi item is placed or removed, causing a change in the maximum Gather Qi value on the tile. The Gather Qi value will reach maximum again after 5 days.
+* Maximum Gather Qi value is determined by adding the Gather Qi value of all Gather Qi objects that are capable of reaching the selected tile. Qi will gradually gather (up to the maximum) onto the tile over 5 days, increasing the tile's Qi value. The gathered Qi will reset to 0 whenever any Gather Qi item is placed or removed, causing a change in the maximum Gather Qi value on the tile. The Gather Qi value will reach maximum again after 5 days.
 
 In addition, when the Feng Shui Vision is activated, the Grid Info panel would change to display Qi value, Gather Qi values and the Elemental Composition of the tile. There are 2 values displayed for each element:
 1. The numeric amount of the element's emission on the tile
